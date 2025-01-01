@@ -1,16 +1,26 @@
 import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../Authentication/AuthProvider";
+import Swal from "sweetalert2";
 
 const NavBar = () => {
-  const {user, signout} = useContext(AuthContext)
+  const { user, signout } = useContext(AuthContext);
 
-  const handleLogout=()=>{
+  const handleLogout = () => {
     signout()
-    .then(()=>{
-      
-    })
-  }
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   return (
     <div>
       <div className="navbar fixed z-10 max-w-6xl bg-base-100 opacity-35">
@@ -95,11 +105,21 @@ const NavBar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          {
-            user?<><Link to={"/login"}><button onClick={handleLogout} className="btn btn-ghost">LOGOUT</button></Link></>:<><Link to={"/login"}><button className="btn">LOGIN</button></Link></>
-          }
-          
-          
+          {user ? (
+            <>
+              <Link>
+                <button onClick={handleLogout} className="btn btn-ghost">
+                  LOGOUT
+                </button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to={"/login"}>
+                <button className="btn">LOGIN</button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
