@@ -11,7 +11,7 @@ const Home = () => {
             <Helmet>
                 <title>BisstroBoss|Home</title>
             </Helmet>
-            <NavBar></NavBar>
+            {/* <NavBar></NavBar> */}
             <Banner></Banner>
             <Categories></Categories>
             <PopularMenu></PopularMenu>

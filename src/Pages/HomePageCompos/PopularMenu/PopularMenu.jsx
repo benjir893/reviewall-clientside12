@@ -12,9 +12,9 @@ const PopularMenu = () => {
   const pizzaItem = menu.filter((item) => item.category === "pizza");
   const dessertItem = menu.filter((item) => item.category === "dessert");
   const drinksItem = menu.filter((item) => item.category === "drinks");
-  const popular = menu.filter(item => item.category==='popular')
+  const popular = menu.filter((item) => item.category === "popular");
   const offeredItem = menu.filter((item) => item.category === "offered");
- 
+
   // useEffect(()=>{
   //     fetch('menu.json')
   //     .then(res =>res.json())
@@ -25,21 +25,21 @@ const PopularMenu = () => {
   // },[])
   return (
     <div>
-         <div className=" my-3">
+      <div className=" my-3">
         <Subtitle
           title={"salad menu"}
           subtitle={"discover the world of taste"}
         ></Subtitle>
         <MapingComponent items={saladItem}></MapingComponent>
       </div>
-         <div className=" my-3">
+      <div className=" my-3">
         <Subtitle
           title={"soup menu"}
           subtitle={"discover the world of taste"}
         ></Subtitle>
         <MapingComponent items={soupItem}></MapingComponent>
       </div>
-         <div className=" my-3">
+      <div className=" my-3">
         <Subtitle
           title={"pizza menu"}
           subtitle={"discover the world of taste"}
@@ -53,7 +53,7 @@ const PopularMenu = () => {
         ></Subtitle>
         <MapingComponent items={dessertItem}></MapingComponent>
       </div>
-         <div className=" my-3">
+      <div className=" my-3">
         <Subtitle
           title={"drinks menu"}
           subtitle={"discover the world of taste"}
@@ -73,9 +73,7 @@ const PopularMenu = () => {
           subtitle={"discover the world of taste"}
         ></Subtitle>
         <MapingComponent items={offeredItem}></MapingComponent>
-     
       </div>
-      
     </div>
   );
 };
