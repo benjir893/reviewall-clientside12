@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import slide1 from "../../../src/assets/slide1.jpg";
 import slide2 from "../../../src/assets/slide2.jpg";
 import {
@@ -8,8 +8,10 @@ import {
 } from "react-simple-captcha";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { AuthContext } from "../../Authentication/AuthProvider";
+import Swal from "sweetalert2";
 const Login = () => {
-  const captchaRef = useRef(null);
+  const { signIn } = useContext(AuthContext);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -20,10 +22,32 @@ const Login = () => {
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    signIn(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        Swal.fire({
+          title: "Custom animation with Animate.css",
+          showClass: {
+            popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `,
+          },
+          hideClass: {
+            popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `,
+          },
+        });
+      })
+      .catch((error) => console.log(error));
   };
-  const handleCaptch = () => {
-    const user_captcha_value = captchaRef.current.value;
+  const handleCaptch = (event) => {
+    const user_captcha_value = event.target.value;
     if (validateCaptcha(user_captcha_value)) {
       setDisabled(false);
     } else {
@@ -83,19 +107,13 @@ const Login = () => {
                   <LoadCanvasTemplate />
                 </label>
                 <input
+                  onBlur={handleCaptch}
                   type="text"
-                  ref={captchaRef}
                   name="captcha"
                   placeholder="type the text above"
                   className="input input-bordered"
                   required
                 />
-                <button
-                  onClick={handleCaptch}
-                  className="btn btn-outline btn-accent btn-xs"
-                >
-                  validate
-                </button>
               </div>
               <div className="form-control mt-6">
                 <input
