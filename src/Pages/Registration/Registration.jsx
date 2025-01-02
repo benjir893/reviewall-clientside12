@@ -2,39 +2,32 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../Authentication/AuthProvider";
 import { Helmet } from "react-helmet-async";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Registration = () => {
-  const { signUp } = useContext(AuthContext);
+  const { signUp, updateUser } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data)
-    signUp(data.email, data.password)
-    .then(userCredential =>{
+    console.log(data);
+    signUp(data.email, data.password).then((userCredential) => {
       const newUser = userCredential.user;
-      console.log(newUser)
-    })
+      console.log(newUser);
+      updateUser(data.userName, data.photourl)
+      .then(()=>{
+        console.log("user name and photo added")
+        reset();
+        navigate(from, {replace:true});
+      }).catch(error =>console.error(error))
+    });
   };
-  // const handleRegistration =event =>{
-  //   event.preventDefault();
-  //   const form = event.target;
-  //   const username = form.userName.value;
-  //   const email = form.email.value;
-  //   const password = form.password.value;
-  //   console.log(username, email, password)
-  //   signUp(email, password)
-  //   .then(userCredential =>{
-  //     const user = userCredential.user;
-  //     console.log(user)
-  //   })
-  //   .catch(error =>{
-  //     console.error(error);
-  //   })
-
-  // }
   return (
     <>
       <Helmet>
@@ -72,6 +65,23 @@ const Registration = () => {
               </div>
               <div className="form-control">
                 <label className="label">
+                  <span className="label-text">Photo</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("photourl", { required: true })}
+                  placeholder="enter the photo url please"
+                  className="input input-bordered"
+                  required
+                />
+                {errors.photourl?.type === "required" && (
+                  <p role="alert" className="text-red-600">
+                    Photo url is required
+                  </p>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
                   <span className="label-text">Email</span>
                 </label>
                 <input
@@ -99,7 +109,8 @@ const Registration = () => {
                     required: true,
                     minLength: 6,
                     maxLength: 20,
-                    pattern: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_])/,
+                    pattern:
+                      /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_])/,
                   })}
                   placeholder="password"
                   className="input input-bordered"

@@ -105,6 +105,10 @@ const NavBar = () => {
           </ul>
         </div>
         <div className="navbar-end">
+          {
+            user?.displayName
+          }
+          <img className="w-10 h-10 rounded-full px-1 py-1" src={user?.photoURL} alt="" />
           {user ? (
             <>
               <Link>
